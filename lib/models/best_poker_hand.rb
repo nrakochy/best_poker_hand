@@ -1,6 +1,5 @@
 require_relative 'card_maker'
 require 'set'
-require 'pry'
 
 class BestPokerHand 
 
@@ -10,10 +9,10 @@ class BestPokerHand
   end
 
   def determine_value_of_hand hand_of_cards
+
    stringified_hand = stringify(hand_of_cards)
    poker_hand = create_card(stringified_hand)
-#binding.pry
-    case poker_hand 
+    case 
     when straight_flush?(poker_hand)
       puts "Best hand = Straight Flush"
     when four_of_kind?(poker_hand)
@@ -113,4 +112,4 @@ class BestPokerHand
   
   end
 
-BestPokerHand.new.determine_value_of_hand(['2c', '3c', '2h', '5c', '2s'])
+BestPokerHand.new.determine_value_of_hand(['2c', '2h', '4c', '4h', '2s'])
