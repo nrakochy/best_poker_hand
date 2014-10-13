@@ -20,7 +20,7 @@ describe BestPokerHand do
       expect(BestPokerHand.new(['2c']).create_card([['2','c']])).to eq([@card1])
     end
 
-    it '.pair? returs if poker hash includes value of 2' do
+    it '.pair? returns true if poker hash includes value of 2' do
       expect(BestPokerHand.new.pair?(@poker_hand)).to eq(true)
     end
 
@@ -66,18 +66,21 @@ describe BestPokerHand do
        @card2= CardMaker.new(['3','c'])
        @card3= CardMaker.new(['4','c'])
        @card4= CardMaker.new(['5','c'])
-       @card5= CardMaker.new(['6','d'])
+       @card5= CardMaker.new(['6','c'])
        @clubs= [@card1, @card2, @card3, @card4, @card5]
     end
 
     it '.flush? returns false if poker hash does not include five of the same suit'  do
-      expect(BestPokerHand.new.flush?(@clubs)).to eq(false)
+      new_hand = @clubs.drop(1)
+      expect(BestPokerHand.new.flush?(new_hand)).to eq(false)
     end
 
     it '.flush? returns true if poker hash includes five of the same suit'  do
-      new_card = CardMaker.new(['J','c'])
-      five_match = @clubs << new_card
-      expect(BestPokerHand.new.flush?(five_match)).to eq(true)
+      expect(BestPokerHand.new.flush?(@clubs)).to eq(true)
+    end
+
+    it '.straight_flush? returns true if poker hash includes five of the same suit in numeric order'  do
+      expect(BestPokerHand.new.flush?(@clubs)).to eq(true)
     end
 
   end

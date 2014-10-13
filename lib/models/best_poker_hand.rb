@@ -1,31 +1,39 @@
 require_relative 'card_maker'
+require 'set'
+require 'pry'
+
 class BestPokerHand 
 
-  attr_accessor :hand_value 
 
 
   def initialize 
-    @hand_rank = {
-      1 => :straight_flush, 
-      2 => :four_of_kind,
-      3 => :full_house,
-      4 => :flush,
-      5 => :straight,
-      6 => :three_of_kind,
-      7 => :two_pair,
-      8 => :pair,
-      9 => :high_card
-    }
-
-   # @available_cards = (2..10).to_a + 'J' + 'Q' + 'K' + 'A'
   end
 
-  # [card1, card2, card3, card4, card5]
-  def determine_value_of_hand poker_hand
-    card_value = nil
-    poker_hand.each do |card|
+  def determine_value_of_hand hand_of_cards
+   stringified_hand = stringify(hand_of_cards)
+   poker_hand = create_card(stringified_hand)
+#binding.pry
+    case poker_hand 
+    when straight_flush?(poker_hand)
+      puts "Best hand = Straight Flush"
+    when four_of_kind?(poker_hand)
+      puts "Best hand = Four of a Kind"
+    when full_house?(poker_hand)
+      puts "Best hand = Full House"
+    when flush?(poker_hand)
+      puts "Best hand = Flush"
+    when straight?(poker_hand)
+      puts "Best hand = Straight"
+    when three_of_kind?(poker_hand)
+      puts "Best hand = Three of a Kind"
+    when two_pair?(poker_hand)
+      puts "Best hand = Two Pair"
+    when pair?(poker_hand)
+      puts "Best hand = Pair"
+    else 
+      puts "Best hand = High Card"
     end
-  end
+  end  
 
   def count_suits poker_hand
     poker_hash = Hash.new(0)
@@ -37,7 +45,6 @@ class BestPokerHand
     poker_hash = Hash.new(0)
     poker_hand.each{|card| poker_hash[card.value] += 1}
     poker_hash
-
   end
 
 #COUNT VALUE  
@@ -75,6 +82,21 @@ class BestPokerHand
     poker_hash.has_value?(5)
   end
 
+  def straight_flush? poker_hand
+   flush?(poker_hand)  && straight?(poker_hand)
+  end
+
+  def straight? poker_hand
+      arr = (2..10).to_a
+      card_deck = arr.map{|num| num.to_s}
+      card_deck_values = (card_deck + ['J', 'Q' , 'K', 'A']).to_set
+      face_value_arr = []
+      poker_hand.each{|card|face_value_arr.push(card.value)}
+      face_value_arr = face_value_arr.uniq.sort.to_set
+      face_value_arr.subset?(card_deck_values) && face_value_arr.length == 5 
+  end
+
+
 #CREATE HAND  
   def stringify card_hand
     card_hand.map{|card| card.split(//)}
@@ -90,3 +112,5 @@ class BestPokerHand
   end
   
   end
+
+BestPokerHand.new.determine_value_of_hand(['2c', '3c', '2h', '5c', '2s'])
