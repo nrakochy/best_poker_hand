@@ -102,14 +102,13 @@ class BestPokerHand
   end
 
   def create_card stringified_hand
-    poker_hand = []
-    stringified_hand.each do |card|
-      card_obj = CardMaker.new(card)
-      poker_hand << card_obj
-    end
-    poker_hand
-  end
-  
+    stringified_hand.map{|card| CardMaker.new(card)}
   end
 
-BestPokerHand.new.determine_value_of_hand(['2c', '2h', '4c', '4h', '2s'])
+  private
+
+  def blah
+  end
+end
+
+BestPokerHand.new.determine_value_of_hand(['10H', '10S', '3D', '3H', '10C'])
