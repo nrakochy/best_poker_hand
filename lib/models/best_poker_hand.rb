@@ -1,18 +1,9 @@
-require_relative 'card_maker'
 require 'set'
 
-class BestPokerHand 
+class BestPokerHand
 
-
-
-  def initialize 
-  end
-
-  def determine_value_of_hand hand_of_cards
-
-   stringified_hand = stringify(hand_of_cards)
-   poker_hand = create_card(stringified_hand)
-    case 
+  def determine_value_of_hand poker_hand
+    case
     when straight_flush?(poker_hand)
       puts "Best hand = Straight Flush"
     when four_of_kind?(poker_hand)
@@ -29,24 +20,11 @@ class BestPokerHand
       puts "Best hand = Two Pair"
     when pair?(poker_hand)
       puts "Best hand = Pair"
-    else 
+    else
       puts "Best hand = High Card"
     end
-  end  
-
-  def count_suits poker_hand
-    poker_hash = Hash.new(0)
-    poker_hand.each{|card| poker_hash[card.suit] += 1}
-    poker_hash
-  end
-  
-  def count_face_value poker_hand
-    poker_hash = Hash.new(0)
-    poker_hand.each{|card| poker_hash[card.value] += 1}
-    poker_hash
   end
 
-#COUNT VALUE  
   def pair? poker_hand
      poker_hash = count_face_value(poker_hand)
      poker_hash.has_value?(2) && !two_pair?(poker_hand)
@@ -86,29 +64,26 @@ class BestPokerHand
   end
 
   def straight? poker_hand
-      arr = (2..10).to_a
-      card_deck = arr.map{|num| num.to_s}
-      card_deck_values = (card_deck + ['J', 'Q' , 'K', 'A']).to_set
-      face_value_arr = []
-      poker_hand.each{|card|face_value_arr.push(card.value)}
-      face_value_arr = face_value_arr.uniq.sort.to_set
-      face_value_arr.subset?(card_deck_values) && face_value_arr.length == 5 
-  end
-
-
-#CREATE HAND  
-  def stringify card_hand
-    card_hand.map{|card| card.split(//)}
-  end
-
-  def create_card stringified_hand
-    stringified_hand.map{|card| CardMaker.new(card)}
+    arr = (2..10).to_a
+    card_deck = arr.map{|num| num.to_s}
+    card_deck_values = (card_deck + ['J', 'Q' , 'K', 'A']).to_set
+    face_value_arr = []
+    poker_hand.each{|card|face_value_arr.push(card.rank)}
+    face_value_arr = face_value_arr.uniq.sort.to_set
+    face_value_arr.subset?(card_deck_values) && face_value_arr.length == 5
   end
 
   private
 
-  def blah
+  def count_suits poker_hand
+    poker_hash = Hash.new(0)
+    poker_hand.each{|card| poker_hash[card.suit] += 1}
+    poker_hash
+  end
+
+  def count_face_value poker_hand
+    poker_hash = Hash.new(0)
+    poker_hand.each{|card| poker_hash[card.rank] += 1}
+    poker_hash
   end
 end
-
-BestPokerHand.new.determine_value_of_hand(['10H', '10S', '3D', '3H', '10C'])
