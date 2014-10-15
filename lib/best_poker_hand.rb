@@ -1,28 +1,32 @@
+require 'pry'
+require_relative 'output'
 require 'set'
 
 class BestPokerHand
 
-  def determine_value_of_hand poker_hand
+  def determine_value_of_hand poker_hand, full_deck
     case
-    when straight_flush?(poker_hand)
-      puts "Best hand = Straight Flush"
+    when straight_flush?(poker_hand, full_deck)
+      rank = "Straight Flush"
     when four_of_kind?(poker_hand)
-      puts "Best hand = Four of a Kind"
+      rank = "Four of a Kind"
     when full_house?(poker_hand)
-      puts "Best hand = Full House"
+      rank = "Full House"
     when flush?(poker_hand)
-      puts "Best hand = Flush"
-    when straight?(poker_hand)
-      puts "Best hand = Straight"
+      rank = "Flush"
+    when straight?(poker_hand, full_deck)
+      rank = "Straight"
     when three_of_kind?(poker_hand)
-      puts "Best hand = Three of a Kind"
+      rank = "Three of a Kind"
     when two_pair?(poker_hand)
-      puts "Best hand = Two Pair"
+      rank = "Two Pair"
     when pair?(poker_hand)
-      puts "Best hand = Pair"
+      rank = "Pair"
     else
-      puts "Best hand = High Card"
+      rank = "High Card"
     end
+
+    Output.determined_value(rank)
   end
 
   def pair? poker_hand
@@ -59,22 +63,29 @@ class BestPokerHand
     poker_hash.has_value?(5)
   end
 
-  def straight_flush? poker_hand
-   flush?(poker_hand)  && straight?(poker_hand)
+  def straight_flush? poker_hand, full_deck
+    flush?(poker_hand) && straight?(poker_hand)
   end
 
-  def straight? poker_hand
-    arr = (2..10).to_a
-    card_deck = arr.map{|num| num.to_s}
-    card_deck_values = (card_deck + ['J', 'Q' , 'K', 'A']).to_set
-    face_value_arr = []
-    poker_hand.each{|card|face_value_arr.push(card.rank)}
-    face_value_arr = face_value_arr.uniq.sort.to_set
-    face_value_arr.subset?(card_deck_values) && face_value_arr.length == 5
+  def straight? poker_hand, full_deck
+    hand_arr = []
+    poker_hand.each{|card| hand_arr.push(card.rank)}
+    consecutive_five?(hand_arr)
+  end
+  
+  def consecutive_five? hand_ranks
+    rank_values = ((2..10).to_a.map{|num| num.to_s} + ['J', 'Q', 'K', 'A'])
+    sorted_hand = hand_ranks.uniq.sort 
+    lowest_card = sorted_hand.first
+    
+    starting_point = rank_values.index(lowest_card)
+    straight = rank_values[starting_point, 5] || false
+    hand_ranks == straight
   end
 
   private
-
+  
+    
   def count_suits poker_hand
     poker_hash = Hash.new(0)
     poker_hand.each{|card| poker_hash[card.suit] += 1}
