@@ -16,7 +16,7 @@ class Output
     puts "You chose #{input} for card ##{user_input.length}"
   end
   
-  def self.already_picked(input)   
+  def self.already_picked   
     puts "You already picked that card. Please choose another one."
   end
   
@@ -24,9 +24,13 @@ class Output
     puts "Sorry. Try again. You need to choose a valid card."
   end
   
+  def self.mode_summary(mode)
+    puts "You chose #{mode} mode."
+  end
+    
   def self.hand_summary(poker_hand)
     puts "Here's what the hand looks like:"
-    poker_hand.each_with_index{|card, index| puts "card##{index+1}: #{card}"}
+    poker_hand.each_with_index{|card, index| puts "card##{index+1}: #{card.rank}#{card.suit}"}
   end
   
   def self.determined_value(rank)

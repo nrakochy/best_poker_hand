@@ -1,16 +1,14 @@
-require 'pry'
 require_relative 'choose_mode'
-require_relative 'hand_maker'
 require_relative 'deck_maker'
 require_relative 'best_poker_hand'
 
 class Main
 
   def find_best_poker_hand 
-    user_input = ChooseMode.new.choose_mode
+    mode = ChooseMode.new.choose_mode
     full_deck = DeckMaker.new.make_deck_of_cards
-    poker_hand = HandMaker.new.create_hand_of_cards(user_input, full_deck)
-    best_hand = BestPokerHand.new.determine_value_of_hand(poker_hand, full_deck)
+    poker_hand = DeckMaker.new.create_hand_of_cards(mode, full_deck)
+    BestPokerHand.new.determine_value_of_hand(poker_hand, full_deck)
     play_again
   end
   

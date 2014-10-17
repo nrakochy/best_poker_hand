@@ -1,10 +1,9 @@
 class Card
-  attr_accessor :rank, :suit, :id
+  attr_accessor :rank, :suit
 
-  def initialize rank, suit, id
+  def initialize rank, suit
     @rank = rank
     @suit = suit
-    @id = id
   end
 
 end

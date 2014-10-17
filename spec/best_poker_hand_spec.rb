@@ -79,15 +79,66 @@ describe BestPokerHand do
     end
   end
 
+  describe '.consecutive_five_aces_low?' do
+    it 'returns true if five numbers are consecutive' do
+      expect(BestPokerHand.new.consecutive_five_aces_low?(['2','3', '4', '5', '6'])).to eq(true)
+    end
+    
+    it 'returns false if five numbers are not consecutive' do
+      expect(BestPokerHand.new.consecutive_five_aces_low?(['2','3', '4', '5', '7'])).to eq(false)
+    end
+
+    it 'returns false if array includes numbers and face cards that are not consecutive' do 
+      expect(BestPokerHand.new.consecutive_five_aces_low?(['5', 'J', '8', 'K', 'A'])).to eq(false)
+    end
+
+    it 'returns true with an array starting with aces low' do
+      expect(BestPokerHand.new.consecutive_five_aces_low?(['A', '2', '3', '4', '5'])).to eq(true)
+    end
+
+  end
+
+  describe '.consecutive_five_face_cards?' do
+
+    it 'returns true if array includes five consecutive with Aces high' do
+      expect(BestPokerHand.new.consecutive_five_aces_high?(['10', 'J', 'Q', 'K', 'A'])).to eq(true)
+    end
+
+    it 'returns true if array includes five consecutive with only one face card ' do
+      expect(BestPokerHand.new.consecutive_five_aces_high?(['7', '8', '9', '10', 'J'])).to eq(true)
+    end
+
+  end
+
+  describe '.straight?' do
+    it 'returns true if poker hand includes five consecutive cards'  do
+      poker_hand = make_hand([['4','C'], ['5', 'C'], ['6', 'C'], ['7', 'C'], ['8', 'C']])
+      expect(BestPokerHand.new.straight?(poker_hand, @deck)).to eq(true)
+    end
+  end
+
+  describe '.flush?' do
+    it 'returns false if poker hand does not include five of the same suit'  do
+      poker_hand = make_hand([['4','H'], ['5', 'C'], ['6', 'C'], ['7', 'C'], ['8', 'C']])
+      expect(BestPokerHand.new.flush?(poker_hand)).to eq(false)
+    end
+
+    it 'returns true if poker hand includes five of the same suit'  do
+      poker_hand = make_hand([['10','C'], ['5', 'C'], ['6', 'C'], ['7', 'C'], ['8', 'C']])
+      expect(BestPokerHand.new.flush?(poker_hand)).to eq(true)
+    end
+
+  end
+
   describe 'straight_flush?' do
     it 'returns true if poker hash includes five of the same suit in numeric rank order' do
       poker_hand = make_hand([['4','C'], ['5', 'C'], ['6', 'C'], ['7', 'C'], ['8', 'C']])
-      expect(BestPokerHand.new.straight_flush?(poker_hand)).to eq(true)
+      expect(BestPokerHand.new.straight_flush?(poker_hand, @deck)).to eq(true)
     end
 
     it 'returns false if poker hand does not include five of the same suit in numeric rank order' do
       poker_hand = make_hand([['4','C'], ['5', 'D'], ['6', 'C'], ['7', 'C'], ['8', 'C']])
-      expect(BestPokerHand.new.straight_flush?(poker_hand)).to eq(false)
+      expect(BestPokerHand.new.straight_flush?(poker_hand, @deck)).to eq(false)
     end
   end
 end
