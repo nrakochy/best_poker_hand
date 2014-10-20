@@ -98,7 +98,7 @@ describe BestPokerHand do
 
   end
 
-  describe '.consecutive_five_face_cards?' do
+  describe '.consecutive_five_aces_high?' do
 
     it 'returns true if array includes five consecutive with Aces high' do
       expect(BestPokerHand.new.consecutive_five_aces_high?(['10', 'J', 'Q', 'K', 'A'])).to eq(true)
@@ -107,6 +107,7 @@ describe BestPokerHand do
     it 'returns true if array includes five consecutive with only one face card ' do
       expect(BestPokerHand.new.consecutive_five_aces_high?(['7', '8', '9', '10', 'J'])).to eq(true)
     end
+    
 
   end
 

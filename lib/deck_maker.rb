@@ -27,7 +27,11 @@ class DeckMaker
   end
 
   def stringify card
-    card.split(//)
+    if card.length == 3
+      string = card.split(//)
+       [string[0] + string[1], string[2]]
+    else  card.split(//)
+    end
   end
 
   def find_card_in_deck rank, suit, full_deck
@@ -54,14 +58,14 @@ class DeckMaker
 
   def manual_hand(full_deck)
     user_input = []
-    pseudo_deck = deck_clone_no_card_objects
+    deck_rank_suit = deck_clone_no_card_objects
     input_arr  = []
     while user_input.length < 5
       Output.request_input(user_input)
       input = gets.chomp.upcase
-      if pseudo_deck.include?(input)
+      if deck_rank_suit.include?(input)
         user_input << manual_hand_builder(input, full_deck)
-        pseudo_deck.delete(input)
+        deck_rank_suit.delete(input)
         input_arr << input
         Output.valid_card(input, user_input)
       elsif input_arr.include?(input)

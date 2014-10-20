@@ -33,4 +33,16 @@ describe DeckMaker do
     end
   end
 
+  describe '.stringify' do 
+    it 'returns user input as stringified array' do
+      card = '2D'
+      expect(DeckMaker.new.stringify(card)).to eq(['2', 'D'])
+    end
+
+    it 'takes 10H and returns string array with length of 2' do
+      card = '10H'
+      expect(DeckMaker.new.stringify(card)).to eq(['10', 'H'])
+    end
+  end
+
 end
